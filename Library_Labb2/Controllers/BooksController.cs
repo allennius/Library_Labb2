@@ -27,9 +27,6 @@ namespace Library_Labb2.Controllers
         {
             var books = await _context.Books.Include(b => b.Ratings).Include(b => b.Authors).Select(b => b.ToDTO()).AsNoTracking().ToListAsync();
             return Ok(books.DistinctBy(b => b.Isbn).ToList());
-            //return await _context.Books.AsNoTracking().Select(b => b.ToDTO()).AsEnumerable().DistinctBy(b => b.Isbn).Include(b => b.Authors).ToListAsync();
-
-            //return _context.Books.AsNoTracking().Include(b => b.Authors).Select(b => b.ToDTO()).ToList();
         }
 
         // GET: api/Books/5
@@ -57,10 +54,12 @@ namespace Library_Labb2.Controllers
                 return BadRequest();
             }
 
+            var oldBook = _context.Books.FirstOrDefault(b => b.BookID == id);
+            if (oldBook == null) return NotFound();
+
             var newBook = book.ToModel();
-            List<Book> books = await _context.Books.Include(b => b.Authors).Where(b => b.Isbn == book.Isbn).ToListAsync();
-            //var oldBook = _context.Books.Include(b => b.Authors).First(b => b.BookID == id);
-            var oldBook = books.FirstOrDefault();
+
+            List<Book> books = await _context.Books.Include(b => b.Authors).Where(b => b.Isbn == oldBook.Isbn).ToListAsync();
 
             newBook.Authors = new List<Author>();
 
@@ -77,7 +76,7 @@ namespace Library_Labb2.Controllers
                 b.Authors = newBook.Authors;
                 b.Isbn = newBook.Isbn;
                 b.Title = newBook.Title;
-                b.ReleaseDate = newBook.ReleaseDate;
+                b.ReleaseDate = newBook.ReleaseDate.Date;
                 b.Available = newBook.Available;
                 b.Authors = newBook.Authors;
 
@@ -117,7 +116,7 @@ namespace Library_Labb2.Controllers
                     newBook.Authors.Add(author);
             }
 
-            await _context.Books.AddAsync(newBook);
+            _context.Books.Add(newBook);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetBook", new { id = book.BookID }, book);

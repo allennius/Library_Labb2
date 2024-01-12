@@ -19,9 +19,8 @@ public static class BookDTOExtensions
             Authors = new List<AuthorDTO>(),
             AvgRating = source.Ratings?.Average(r => r?.Grade)
         };
-
-        book.Authors.AddRange(source.Authors.Select(x => x.ToDTO()));
-        //book.Ratings?.AddRange(source.Ratings.Select(r => r.ToDTO()));
+        if(source.Authors != null)
+            book.Authors.AddRange(source.Authors.Select(x => x.ToDTO()));
 
         return book;
     }
@@ -48,7 +47,6 @@ public class BookDTO
     public DateTime ReleaseDate { get; set; }
     public bool Available { get; set; } = true;
     public List<AuthorDTO>? Authors { get; set; }
-    //public List<RatingDTO>? Ratings { get; set; }
     public double? AvgRating { get; set; }
 }
 

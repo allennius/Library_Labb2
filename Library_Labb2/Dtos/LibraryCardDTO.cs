@@ -5,7 +5,7 @@ namespace Library_Labb2.Dtos;
 
 public static class LibraryCardDTOExtensions
 {
-    public static LibraryCardDTO ToDTO(this LibraryCard libraryCard)
+    public static LibraryCardDTO? ToDTO(this LibraryCard libraryCard)
     {
         return new LibraryCardDTO
         {

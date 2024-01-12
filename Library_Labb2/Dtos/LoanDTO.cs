@@ -9,10 +9,8 @@ public static class LoanDTOExtensions
         return new LoanDTO
         {
             LoanId = loan.LoanId,
-            LoanDate = loan.LoanDate,
-            ReturnDate = loan.ReturnDate,
             BookId = loan.Book.BookID,
-            LibCardId = loan.LibCard.LibraryCardId
+            OrderId = loan.Order.OrderId
         };
     }
 }
@@ -20,9 +18,6 @@ public static class LoanDTOExtensions
 public class LoanDTO
 {
     public int LoanId { get; set; }
-    public DateTime LoanDate { get; set; }
-    public DateTime? ReturnDate { get; set; }
-
     public int BookId { get; set; }
-    public int LibCardId { get; set; }
+    public int OrderId { get; set; }
 }

@@ -25,21 +25,21 @@ namespace Library_Labb2.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerDTO>>> GetCustomers()
         {
-            return Ok(await _context.Customers.Include(c => c.LibCard).Select(c => c.ToDTO()).ToListAsync());
+            return Ok(await _context.Customers.Include(c => c.LibCard).Select(c => c.ToDTO()).AsNoTracking().ToListAsync());
         }
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(int id)
+        public async Task<ActionResult<CustomerDTO>> GetCustomer(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _context.Customers.Include(c => c.LibCard).FirstOrDefaultAsync(c => c.CustomerId == id);
 
             if (customer == null)
             {
                 return NotFound();
             }
 
-            return Ok(customer);
+            return Ok(customer.ToDTO());
         }
 
         // PUT: api/Customers/5

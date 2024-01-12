@@ -69,6 +69,9 @@ namespace Library_Labb2.Migrations
                     b.Property<bool>("Available")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("EBook")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Isbn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -136,22 +139,42 @@ namespace Library_Labb2.Migrations
                     b.Property<int>("BookID")
                         .HasColumnType("int");
 
-                    b.Property<int>("LibCardLibraryCardId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("LoanDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ReturnDate")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("LoanId");
 
                     b.HasIndex("BookID");
 
-                    b.HasIndex("LibCardLibraryCardId");
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Loans");
+                });
+
+            modelBuilder.Entity("Library_Labb2.Models.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
+
+                    b.Property<int>("LibraryCardId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OrderDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2024, 1, 11, 16, 46, 19, 331, DateTimeKind.Local).AddTicks(2928));
+
+                    b.Property<DateTime?>("ReturnDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("LibraryCardId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Library_Labb2.Models.Rating", b =>
@@ -215,15 +238,26 @@ namespace Library_Labb2.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Library_Labb2.Models.LibraryCard", "LibCard")
+                    b.HasOne("Library_Labb2.Models.Order", "Order")
                         .WithMany("Loans")
-                        .HasForeignKey("LibCardLibraryCardId")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");
 
-                    b.Navigation("LibCard");
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Library_Labb2.Models.Order", b =>
+                {
+                    b.HasOne("Library_Labb2.Models.LibraryCard", "LibraryCard")
+                        .WithMany("Orders")
+                        .HasForeignKey("LibraryCardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LibraryCard");
                 });
 
             modelBuilder.Entity("Library_Labb2.Models.Rating", b =>
@@ -256,6 +290,11 @@ namespace Library_Labb2.Migrations
                 });
 
             modelBuilder.Entity("Library_Labb2.Models.LibraryCard", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Library_Labb2.Models.Order", b =>
                 {
                     b.Navigation("Loans");
                 });

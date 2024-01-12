@@ -28,60 +28,24 @@ namespace Library_Labb2.Controllers
             return await _context.libraryCards.ToListAsync();
         }
 
-        // GET: api/LibraryCards/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<LibraryCard>> GetLibraryCard(int id)
-        {
-            var libraryCard = await _context.libraryCards.FindAsync(id);
-
-            if (libraryCard == null)
-            {
-                return NotFound();
-            }
-
-            return libraryCard;
-        }
-
-        // PUT: api/LibraryCards/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLibraryCard(int id, LibraryCardDTO libraryCardDto)
-        {
-            if (id != libraryCardDto.LibraryCardId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(libraryCardDto).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LibraryCardExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/LibraryCards
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<LibraryCard>> PostLibraryCard(LibraryCardDTO libraryCard)
+        public async Task<ActionResult<LibraryCardDTO>> PostLibraryCard(LibraryCardDTO libraryCard)
         {
-            await _context.libraryCards.AddAsync(new LibraryCard { CustomerId = 1});
+            if (!_context.Customers.Any(c => c.CustomerId == libraryCard.CustomerId))
+                return BadRequest();
+
+            var oldLibraryCard = await _context.libraryCards.FirstOrDefaultAsync(l => l.CustomerId == libraryCard.CustomerId);
+
+            if (oldLibraryCard != null) 
+                _context.libraryCards.Remove(oldLibraryCard);
+
+            await _context.libraryCards.AddAsync(new LibraryCard { CustomerId = libraryCard.CustomerId });
+
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetLibraryCard", new { id = libraryCard.LibraryCardId }, libraryCard);
+            return Ok(libraryCard);
         }
 
         // DELETE: api/LibraryCards/5
@@ -98,11 +62,6 @@ namespace Library_Labb2.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool LibraryCardExists(int id)
-        {
-            return _context.libraryCards.Any(e => e.LibraryCardId == id);
         }
     }
 }

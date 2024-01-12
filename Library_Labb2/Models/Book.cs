@@ -9,6 +9,7 @@ public class Book
     public string Title { get; set; }
     public DateTime ReleaseDate { get; set; }
     public bool Available { get; set; } = true;
+    public bool EBook { get; set; } = false;
 
     public ICollection<Author>? Authors { get; set; }
     public ICollection<Rating>? Ratings { get; set; }

@@ -27,8 +27,6 @@ namespace Library_Labb2.Controllers
         {
             var authors = await _context.Authors.AsNoTracking().Select(a => a.ToDTO()).ToListAsync();
 
-            if (authors.Count == 0) return NotFound();
-
             return Ok(authors);
         }
 
@@ -44,37 +42,6 @@ namespace Library_Labb2.Controllers
             }
 
             return Ok(author);
-        }
-
-        // PUT: api/Authors/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAuthor(int id, Author author)
-        {
-            if (id != author.AuthorID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(author).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AuthorExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // POST: api/Authors

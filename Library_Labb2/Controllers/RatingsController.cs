@@ -22,24 +22,10 @@ namespace Library_Labb2.Controllers
         }
 
         // GET: api/Ratings
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<RatingDTO>>> GetRating()
-        {
-            return await _context.Rating.Include(r => r.Book).Include(r => r.Customer).Select(r => r.ToDTO()).ToListAsync();
-        }
-
-        // GET: api/Ratings/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RatingDTO>> GetRating(int id)
+        public async Task<ActionResult<IEnumerable<RatingDTO>>> GetRatingsForBook(int id)
         {
-            var rating = await _context.Rating.FindAsync(id);
-
-            if (rating == null)
-            {
-                return NotFound();
-            }
-
-            return rating.ToDTO();
+            return Ok(_context.Rating.Include(r => r.Book).Include(r => r.Customer).Where(r => r.Book.BookID == id).AsNoTracking().Select(r => r.ToDTO()));
         }
 
         // PUT: api/Ratings/5
@@ -88,7 +74,7 @@ namespace Library_Labb2.Controllers
             await _context.Rating.AddAsync(newRating);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRating", new { id = rating.RatingId }, rating);
+            return Ok(newRating.ToDTO());
         }
 
         // DELETE: api/Ratings/5

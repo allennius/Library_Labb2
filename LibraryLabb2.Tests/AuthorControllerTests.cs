@@ -78,15 +78,15 @@ public class AuthorControllerTests
             var authors = result.Value as List<AuthorDTO>;
             Assert.Equal(authorCount, authors.Count());
 
-
+            var controlAuthor = context.Authors.First();
             var singleActionResult = await controller.GetAuthor(authors.First().AuthorID);
             var singleResult = singleActionResult.Result as OkObjectResult;
             var author = singleResult.Value as Author;
 
             Assert.NotNull(author);
             Assert.Equal(author.AuthorID, authors.First().AuthorID);
-            Assert.Equal("FA", author.FirstName);
-            Assert.Equal("LA", author.LastName);
+            Assert.Equal(controlAuthor.FirstName, author.FirstName);
+            Assert.Equal(controlAuthor.LastName, author.LastName);
         }
 
     }

@@ -1,6 +1,226 @@
-@Library_Labb2_HostAddress = http://localhost:5128
+@Library_Labb2_HostAddress = https://localhost:7207
 
-GET {{Library_Labb2_HostAddress}}/weatherforecast/
-Accept: application/json
+// Todo 
+// Test everyThing after commented LoansController
+// Remove loan Controller
+// Push To git
+
+
+// :: OK ::
+// Authors
+// Books
+// Customers
+// Cards
+// Orders
+// Rating
+
+// #### AUTHORS ####
+
+// Get All Authors
+GET {{Library_Labb2_HostAddress}}/api/authors
+
+###
+// Get One Author
+GET {{Library_Labb2_HostAddress}}/api/authors/1
+
+###
+// Create one Author
+POST {{Library_Labb2_HostAddress}}/api/authors
+Content-Type: application/json
+
+{
+  "firstName": "J. R. R.",
+  "lastName": "Tolkien"
+}
+
+###
+// Delete One Author
+DELETE {{Library_Labb2_HostAddress}}/api/authors/3
+
+
+#### BOOKS ####
+
+// Get All Books
+GET {{Library_Labb2_HostAddress}}/api/books
+
+###
+// Get one Book
+GET {{Library_Labb2_HostAddress}}/api/books/2
+
+###
+// Create New Book
+POST {{Library_Labb2_HostAddress}}/api/books
+Content-Type: application/json
+
+{
+  "isbn": "12312-asasds",
+  "title": "JK Tolkien Works",
+  "releaseDate": "1990-01-09",
+  "available": true,
+  "authors": [
+    {
+      "authorID": 1,
+      "Firstname": "",
+      "LastName": ""
+    },
+    {
+      "authorID": 2,
+      "Firstname": "",
+      "LastName": ""
+    }
+  ]
+}
+
+###
+// Edit Book
+PUT {{Library_Labb2_HostAddress}}/api/books/1
+Content-Type: application/json
+
+{
+  "bookID": 1,
+  "isbn": "1213123-aBC",
+  "title": "JK Tolkien Work",
+  "releaseDate": "1991-01-09",
+  "available": true,
+  "authors": [
+    {
+      "authorID": 1,
+      "firstName": "",
+      "lastName": ""
+    },
+    {
+      "authorID": 2,
+      "firstName": "",
+      "lastName": ""
+    }
+  ]
+}
+
+###
+// Delete Book
+DELETE {{Library_Labb2_HostAddress}}/api/books/2
+
+
+
+#### CUSTOMERS ####
+
+// Get All Customers
+GET {{Library_Labb2_HostAddress}}/api/customers
+
+###
+// Get One Customer
+GET {{Library_Labb2_HostAddress}}/api/customers/1
+
+
+###
+// Create Customer
+POST {{Library_Labb2_HostAddress}}/api/customers
+Content-Type: application/json
+
+{
+  "firstName": "Holge",
+  "lastName": "Persson"
+}
+
+
+###
+// Edit Customer
+PUT {{Library_Labb2_HostAddress}}/api/customers/1
+Content-Type: application/json
+
+{
+  "customerId" : 1,
+  "firstName": "Maxx",
+  "lastName": "Persson"
+}
+
+###
+// Delete Customer
+DELETE {{Library_Labb2_HostAddress}}/api/customers/3
+
+
+
+
+#### Library Cards ####
+
+// Get all libraryCards
+GET {{Library_Labb2_HostAddress}}/api/librarycards
+
+###
+
+// Create Library Card
+POST {{Library_Labb2_HostAddress}}/api/librarycards
+Content-Type: application/json
+
+{
+  "customerId": 1
+}
+
+###
+// Delete Library Card
+DELETE {{Library_Labb2_HostAddress}}/api/librarycards/2
+
+
+
+
+#### Orders ####
+
+// Get All Orders
+GET {{Library_Labb2_HostAddress}}/api/orders
+
+###
+// Create Order
+POST {{Library_Labb2_HostAddress}}/api/orders
+Content-Type: application/json
+
+{
+  "loans": [
+    {
+      "bookId" : 1
+    }
+  ],
+  "libCard": {
+    "libraryCardId": 1
+  }
+}
+
+###
+// Return Order
+PUT {{Library_Labb2_HostAddress}}/api/orders/1
+
+
+#### RATINGS ###
+
+// Get All Ratings For a Specific Book
+GET {{Library_Labb2_HostAddress}}/api/ratings/1
+
+###
+// Add Rating
+POST {{Library_Labb2_HostAddress}}/api/ratings
+Content-Type: application/json
+
+{
+  "grade": 6,
+  "comment": "Its a Decent one",
+  "bookId": 1,
+  "customerId": 1
+}
+
+###
+// Remove Rating
+DELETE {{Library_Labb2_HostAddress}}/api/ratings/1
+
+###
+// Edit Rating
+PUT {{Library_Labb2_HostAddress}}/api/ratings/2
+Content-Type: application/json
+
+{
+  "ratingId": 2,
+  "grade": 7,
+  "comment": "Its a very good one",
+  "bookId": 1,
+  "customerId": 1
+}
 
 ###
